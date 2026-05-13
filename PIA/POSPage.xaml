@@ -1,0 +1,382 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Page
+    x:Class="PIA.POSPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:PIA"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="77"/>
+            <RowDefinition Height="*"/> 
+            <RowDefinition Height="48"/>
+        </Grid.RowDefinitions>
+
+        <!-- ═══════════════════════════════════════════════ -->
+        <!-- BARRA PRINCIPAL -->
+        <Grid Grid.Row="0" Background="#1E2333" Padding="5,0" Margin="0,10,0,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+
+            <StackPanel Grid.Column="0" Orientation="Horizontal"
+                        VerticalAlignment="Center" Margin="12,0,20,0" Spacing="10">
+                <Border Width="92" Height="60" Margin="35,0,-100,0">
+                    <Border.Background>
+                        <ImageBrush ImageSource="ms-appx:///Assets/logoPrincipal.png"
+                                    Stretch="UniformToFill"/>
+                    </Border.Background>
+                </Border>
+            </StackPanel>
+
+            <AutoSuggestBox Grid.Column="1"
+                            x:Name="BuscadorBox"
+                            PlaceholderText="Busca un producto"
+                            QueryIcon="Find"
+                            VerticalAlignment="Center"
+                            MaxWidth="700"
+                            HorizontalAlignment="Stretch"
+                            Margin="60,0,20,0"
+                            Background="#2C3249"
+                            Foreground="White"
+                            BorderBrush="#3D4566"
+                            CornerRadius="5"
+                            TextChanged="BuscadorBox_TextChanged"/>
+
+            <!--Nombre del empleado-->
+            <StackPanel Grid.Column="2" Orientation="Horizontal"
+                        VerticalAlignment="Center" Spacing="8" Margin="0,0,12,0">
+
+                <StackPanel Orientation="Horizontal" Spacing="8" VerticalAlignment="Center" Margin="0,0,15,0">
+                    <Border Width="40" Height="40" CornerRadius="30" Background="#F0F2F8">
+                        <TextBlock Text="👤" FontSize="37" VerticalAlignment="Center" Margin="-5,0,0,0"/>
+                    </Border>
+                    <StackPanel VerticalAlignment="Center">
+                        <TextBlock x:Name="TxtNombreEmpleado"
+                                   Foreground="White" FontSize="13" FontWeight="SemiBold"/>
+                        <TextBlock Text="Empleado" Foreground="#A0A8C0" FontSize="10"/>
+                    </StackPanel>
+                </StackPanel>
+
+                <!--Botón para abrir el carrito de ventas-->
+                <Button x:Name="BtnAbrirVenta"
+                        Background="#E8611A" CornerRadius="8"
+                        Padding="12,7" BorderThickness="0"
+                        Click="BtnAbrirVenta_Click">
+                    <StackPanel Orientation="Horizontal" Spacing="8">
+                        <FontIcon Glyph="&#xE7BF;" FontSize="15" Foreground="White"/>
+                        <Border Background="White" CornerRadius="10"
+                                MinWidth="20" Height="20" Padding="4,0">
+                            <TextBlock x:Name="ContadorCarrito"
+                                       Text="0" Foreground="#E8611A"
+                                       FontSize="11" FontWeight="Bold"
+                                       HorizontalAlignment="Center"
+                                       VerticalAlignment="Center"/>
+                        </Border>
+                    </StackPanel>
+                </Button>
+
+                <!--Botón para cerrar sesión-->
+                <Button Background="#C0392B" CornerRadius="8"
+                        Padding="12,7" BorderThickness="0"
+                        Click="BtnCerrarSesion_Click">
+                    <TextBlock Text="Cerrar Sesión" Foreground="White" FontWeight="SemiBold"/>
+                </Button>
+
+            </StackPanel>
+        </Grid>
+
+        <!-- ═══════════════════════════════════════════════ -->
+        <!-- CONTENIDO PRINCIPAL -->
+
+        <Grid Grid.Row="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="19"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Border Grid.Row="0" Grid.ColumnSpan="2" Height="19" Background="#2F3545"/>
+
+            <Grid Grid.Row="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition x:Name="ColContenido" Width="*"/>
+                    <ColumnDefinition x:Name="ColCarrito" Width="0"/>
+                </Grid.ColumnDefinitions>
+
+                <!--Aquí se crean los cuadros de las categorias-->
+                <Grid x:Name="VistaCategorias" Grid.Column="0" Background="#F0F2F8">
+
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <GridView x:Name="CategoriasGrid"
+                              Grid.Row="1"
+                              Padding="40,35,24,24"
+                              SelectionMode="None"
+                              IsItemClickEnabled="True"
+                              ItemClick="CategoriasGrid_ItemClick">
+
+                        <GridView.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <ItemsWrapGrid Orientation="Horizontal"
+                               ItemWidth="300"
+                               ItemHeight="240"/>
+                            </ItemsPanelTemplate>
+                        </GridView.ItemsPanel>
+
+                        <GridView.ItemContainerStyle>
+                            <Style TargetType="GridViewItem">
+                                <Setter Property="Padding" Value="0"/>
+                                <Setter Property="Margin" Value="0"/>
+                                <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                                <Setter Property="VerticalContentAlignment" Value="Stretch"/>
+                            </Style>
+                        </GridView.ItemContainerStyle>
+
+                    </GridView>
+                </Grid>
+
+                <!--Aquí se crea la vista de los productos-->
+                <Grid x:Name="VistaProductos" Grid.Column="0" Background="#F0F2F8"
+                      Visibility="Collapsed">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <Grid Grid.Row="0" Margin="24,18,24,12">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+
+                        <!--Botón para volver a ver las categorias-->
+                        <Button Grid.Column="0"
+                                x:Name="BtnVolverCategorias"
+                                Background="#1E2333" CornerRadius="8"
+                                Padding="10,8" BorderThickness="0"
+                                Margin="0,0,16,0"
+                                Click="BtnVolverCategorias_Click">
+                            <StackPanel Orientation="Horizontal" Spacing="6">
+                                <FontIcon Glyph="&#xE72B;" FontSize="14" FontWeight="SemiBold" Foreground="White"/>
+                                <TextBlock Text="Regresar" Foreground="White"
+                                           FontWeight="SemiBold" FontSize="14"/>
+                            </StackPanel>
+                        </Button>
+
+                        <TextBlock x:Name="TituloCategoria"
+                                   Grid.Column="1" Text="Productos"
+                                   FontSize="22" FontWeight="Bold"
+                                   Foreground="#1E2333"
+                                   VerticalAlignment="Center"/>
+
+                        <Border Grid.Column="2" Background="White" CornerRadius="14"
+                                Padding="12,5" BorderBrush="#D0D4E8" BorderThickness="1"
+                                VerticalAlignment="Center">
+                            <TextBlock x:Name="ContadorProductos"
+                                       Text="0 productos" FontSize="12" Foreground="#5A6080"/>
+                        </Border>
+                    </Grid>
+
+                    <GridView x:Name="ProductosGrid"
+                              Grid.Row="1"
+                              Padding="16,0,16,16"
+                              SelectionMode="None"
+                              IsItemClickEnabled="True"
+                              ItemClick="ProductosGrid_ItemClick">
+                        <GridView.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <ItemsWrapGrid Orientation="Horizontal"
+                                               ItemWidth="186"
+                                               ItemHeight="235"/>
+                            </ItemsPanelTemplate>
+                        </GridView.ItemsPanel>
+                        <GridView.ItemContainerStyle>
+                            <Style TargetType="GridViewItem">
+                                <Setter Property="Padding" Value="0"/>
+                                <Setter Property="Margin" Value="0"/>
+                                <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                                <Setter Property="VerticalContentAlignment" Value="Stretch"/>
+                            </Style>
+                        </GridView.ItemContainerStyle>
+                    </GridView>
+                </Grid>
+
+                <!-- PANEL DE CARRITO DE VENTAS -->
+                <Border x:Name="VentaPanel"
+                        Grid.Column="1"
+                        HorizontalAlignment="Right"
+                        VerticalAlignment="Stretch"
+                        Background="White"
+                        BorderBrush="#E0E4F0"
+                        BorderThickness="1,0,0,0"
+                        Visibility="Collapsed"
+                        Width="340">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+
+                        <Grid Grid.Row="0" Padding="16,14,16,14"
+                              BorderBrush="#E0E4F0" BorderThickness="0,0,0,1">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Column="0" Orientation="Horizontal" Spacing="8">
+                                <FontIcon Glyph="&#xE7BF;" FontSize="18" Foreground="#1E2333"/>
+                                <TextBlock Text="Venta Actual" FontSize="16"
+                                           FontWeight="Bold" Foreground="#1E2333"
+                                           VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </Grid>
+
+                        <StackPanel Grid.Row="1" Padding="16,12,16,4" Spacing="6">
+                            <TextBlock Text="CLIENTE" FontSize="11" FontWeight="SemiBold"
+                                       Foreground="#7A8099" CharacterSpacing="80"/>
+                        </StackPanel>
+
+                        <ScrollViewer Grid.Row="2" VerticalScrollBarVisibility="Auto" Padding="0,4,0,0">
+                            <StackPanel x:Name="PanelCarrito" Spacing="0">
+                                <StackPanel x:Name="MensajeVacio"
+                                            VerticalAlignment="Center"
+                                            HorizontalAlignment="Center"
+                                            Spacing="8" Margin="0,40,0,0">
+                                    <FontIcon Glyph="&#xE7BF;" FontSize="36"
+                                              Foreground="#D0D4E8" HorizontalAlignment="Center"/>
+                                    <TextBlock Text="Toca un producto para agregarlo"
+                                               Foreground="#A0A8C0" FontSize="13"
+                                               HorizontalAlignment="Center" TextAlignment="Center"/>
+                                </StackPanel>
+                            </StackPanel>
+                        </ScrollViewer>
+
+                        <StackPanel Grid.Row="3" Padding="16,12,16,12" Spacing="6"
+                                    BorderBrush="#E0E4F0" BorderThickness="0,1,0,1">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Grid.Column="0" Text="Subtotal"
+                                           Foreground="#5A6080" FontSize="13"/>
+                                <TextBlock x:Name="TxtSubtotal" Grid.Column="1"
+                                           Text="$0.00" Foreground="#1E2333" FontSize="13"/>
+                            </Grid>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Grid.Column="0" Text="IVA (16%)"
+                                           Foreground="#5A6080" FontSize="13"/>
+                                <TextBlock x:Name="TxtIva" Grid.Column="1"
+                                           Text="$0.00" Foreground="#1E2333" FontSize="13"/>
+                            </Grid>
+                            <Grid Margin="0,4,0,0">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Grid.Column="0" Text="TOTAL"
+                                           FontSize="16" FontWeight="Bold" Foreground="#1E2333"/>
+                                <TextBlock x:Name="TxtTotal" Grid.Column="1"
+                                           Text="$0.00" FontSize="16" FontWeight="Bold"
+                                           Foreground="#E8611A"/>
+                            </Grid>
+                        </StackPanel>
+
+                        <Grid Grid.Row="4" Padding="16,12,16,0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="8"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            
+                            <Border x:Name="BtnEfectivo" Grid.Column="0"
+                                    HorizontalAlignment="Stretch" Background="Transparent"
+                                    BorderBrush="#E8611A" BorderThickness="1.5"
+                                    CornerRadius="8" Padding="10,10"
+                                    Tapped="BtnMetodoPago_Click" Tag="Efectivo">
+                                <StackPanel Orientation="Horizontal" Spacing="6" HorizontalAlignment="Center">
+                                    <FontIcon Glyph="&#xE8C7;" FontSize="15" Foreground="#E8611A"/>
+                                    <TextBlock x:Name="TxtEfectivo" Text="Efectivo" Foreground="#E8611A" FontWeight="SemiBold"/>
+                                </StackPanel>
+                            </Border>
+                                
+                            <Border x:Name="BtnTarjeta" Grid.Column="2"
+                                    HorizontalAlignment="Stretch" Background="Transparent"
+                                    BorderBrush="#D0D4E8" BorderThickness="1"
+                                    CornerRadius="8" Padding="10,10"
+                                    Tapped="BtnMetodoPago_Click" Tag="Tarjeta">
+                                <StackPanel Orientation="Horizontal" Spacing="6" HorizontalAlignment="Center">
+                                    <FontIcon x:Name="IconTarjeta" Glyph="&#xE8CE;" FontSize="15" Foreground="#5A6080"/>
+                                    <TextBlock x:Name="TxtTarjeta" Text="Tarjeta" Foreground="#5A6080"/>
+                                </StackPanel>
+                            </Border>
+                        </Grid>
+
+                        <Grid Grid.Row="5" Padding="16,10,16,16">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="8"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Button x:Name="BtnCancelarVenta" Grid.Column="0"
+                                    HorizontalAlignment="Stretch" Background="#F0F2F8"
+                                    BorderThickness="0" CornerRadius="8" Padding="0,12"
+                                    Click="BtnCancelarVenta_Click">
+                                <TextBlock Text="Cancelar" Foreground="#5A6080"
+                                           FontWeight="SemiBold" HorizontalAlignment="Center"/>
+                            </Button>
+                            <Button x:Name="BtnCobrar" Grid.Column="2"
+                                    HorizontalAlignment="Stretch" Background="#27AE60"
+                                    BorderThickness="0" CornerRadius="8" Padding="0,12"
+                                    Click="BtnCobrar_Click">
+                                <TextBlock Text="Cobrar" Foreground="White"
+                                           FontWeight="Bold" FontSize="15"
+                                           HorizontalAlignment="Center"/>
+                            </Button>
+                        </Grid>
+                    </Grid>
+                </Border>
+
+            </Grid>
+        </Grid>
+
+        <!-- ═══════════════════════════════════════════════ -->
+        <!-- FOOTER -->
+        <Grid Grid.Row="2" Background="#1E2333" Padding="16,0">
+            
+            <!--Botón para el reporte de ventas-->
+            <Button x:Name="BtnReporte"
+                    Background="#2ECC71"
+                    BorderThickness="0"
+                    CornerRadius="8"
+                    Padding="12,6"
+                    VerticalAlignment="Center"
+                    Click="BtnReporte_Click">
+                <StackPanel Orientation="Horizontal" Spacing="8">
+                    <FontIcon Glyph="&#xE9F9;" FontSize="15" Foreground="White"/>
+                    <TextBlock Text="Reporte de ventas"
+                               Foreground="White"
+                               FontSize="13"
+                               VerticalAlignment="Center"/>
+                </StackPanel>
+            </Button>
+        </Grid>
+
+    </Grid>
+</Page>

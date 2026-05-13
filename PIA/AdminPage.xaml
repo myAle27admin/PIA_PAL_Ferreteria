@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Page
+    x:Class="PIA.AdminPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:PIA"
+    xmlns:conv="using:PIA.Converters"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+
+    <!-- Recursos que se usan para darle color y grosor al stock cuando sea bajo-->
+    <Page.Resources>
+        <conv:StockColorConverter x:Key="StockColorConverter"/>
+        <conv:StockWeightConverter x:Key="StockWeightConverter"/>
+    </Page.Resources>
+
+    <!--La pagina está dividida en 3 filas, aquí se crean-->
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="77"/> <!-- BARRA PRINCIPAL -->
+            <RowDefinition Height="*"/> <!-- CONTENIDO PRINCIPAL -->
+            <RowDefinition Height="Auto"/> <!-- FOOTER -->
+        </Grid.RowDefinitions>
+
+        <!-- ═══════════════════════════════════════════════ -->
+        <!-- BARRA PRINCIPAL -->
+        <Grid Grid.Row="0" Background="#5C1010" Padding="5,0" Margin="0,10,0,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+
+            <!--Logo Casa Del Herrero-->
+            <StackPanel Grid.Column="0" Orientation="Horizontal"
+                        VerticalAlignment="Center" Margin="12,0,20,0" Spacing="10">
+                <Border Width="92" Height="60" Margin="5,0,-100,0">
+                    <Border.Background>
+                        <ImageBrush ImageSource="ms-appx:///Assets/logoPrincipal.png"
+                                    Stretch="UniformToFill"/>
+                    </Border.Background>
+                </Border>
+            </StackPanel>
+
+            <!-- Barra de búsqueda -->
+            <AutoSuggestBox Grid.Column="1"
+                x:Name="BuscadorBox"
+                PlaceholderText="Buscar producto/categoría/marca"
+                QueryIcon="Find"
+                TextChanged="BuscadorBox_TextChanged"
+                Loaded="BuscadorBox_Loaded"
+                VerticalAlignment="Center"
+                MaxWidth="850"
+                HorizontalAlignment="Stretch"
+                Margin="60,0,20,0"
+                Background="#7A1A1A"
+                Foreground="White"
+                BorderBrush="#9B2A2A"
+                CornerRadius="5"/>
+
+            <!--Indicador de Admin-->
+            <StackPanel Grid.Column="2" Orientation="Horizontal"
+                        VerticalAlignment="Center" Spacing="8" Margin="0,0,12,0">
+
+                <StackPanel Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
+                    <Border Width="40" Height="40" CornerRadius="30" Background="#F0F2F8">
+                        <TextBlock Text="🧑‍💼" FontSize="37" VerticalAlignment="Center" Margin="-5,0,0,0"/>
+                    </Border>
+                    <StackPanel VerticalAlignment="Center">
+                        <TextBlock x:Name="TxtNombreAdmin"
+                                   Foreground="White" FontSize="13" FontWeight="SemiBold"/>
+                        <TextBlock Text="Administrador" Foreground="#F4A0A0" FontSize="10"/>
+                    </StackPanel>
+                </StackPanel>
+
+                <!-- Botón de cerrar sesión -->
+                <Button Background="#8B0000" CornerRadius="8"
+                        Padding="12,7" BorderThickness="0"
+                        Click="BtnCerrarSesion_Click" Margin="20,0,0,0">
+                    <TextBlock Text="Cerrar Sesión" Foreground="White" FontWeight="SemiBold"/>
+                </Button>
+
+            </StackPanel>
+        </Grid>
+
+        <!-- ═══════════════════════════════════════════════ -->
+        <!-- CONTENIDO PRINCIPAL -->
+        <Grid Grid.Row="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="19"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Border Grid.Row="0" Height="19" Background="#3D0A0A"/>
+
+            <!-- Área de contenido-->
+            <Grid Grid.Row="1" Background="#F5F0F0" RequestedTheme="Light" PointerPressed="Background_Click">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <TextBlock Grid.Row="0" Text="Gestión de Productos"
+           FontSize="28"
+           FontWeight="Bold"
+           Foreground="#5C1010"
+           HorizontalAlignment="Center"/>
+
+                <!--Contenedor fijo de botones para la Gestión de Productos-->
+                <StackPanel Grid.Row="1" Orientation="Horizontal"
+            HorizontalAlignment="Center"
+            Spacing="20"
+            Margin="0,20,0,10">
+
+                    <!--Agregar-->
+                    <Button Content="Agregar"
+            Click="GoToAdd_Click"
+            Width="140"
+            Height="45"
+            Background="#8B0000"
+            Foreground="White"
+            FontWeight="SemiBold"/>
+
+                    <!--Editar-->
+                    <Button Content="Editar"
+            Click="GoToEdit_Click"
+            Width="140"
+            Height="45"
+            Background="#A52A2A"
+            Foreground="White"
+            FontWeight="SemiBold"/>
+
+                    <!--Eliminar-->
+                    <Button Content="Eliminar"
+            Click="GoToDelete_Click"
+            Width="140"
+            Height="45"
+            Background="#5C1010"
+            Foreground="White"
+            FontWeight="SemiBold"/>
+                </StackPanel>
+
+                <!-- Tabla de productos -->
+                <ListView x:Name="ListaProductos" Grid.Row="2" Padding="30"
+          SelectionMode="Single"
+          Margin="0,20,0,0">
+                    <!--Encabezados-->
+                    <ListView.Header>
+                        <Grid ColumnSpacing="20">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="70"/>
+                                <ColumnDefinition Width="2.2*"/>
+                                <ColumnDefinition Width="2*"/>
+                                <ColumnDefinition Width="1*"/>
+                                <ColumnDefinition Width="1*"/>
+                                <ColumnDefinition Width="1.8*"/>
+                                <ColumnDefinition Width="1.8*"/>
+                            </Grid.ColumnDefinitions>
+
+                            <TextBlock Text="Icono" Grid.Column="0" FontWeight="Bold" HorizontalAlignment="Center"/>
+                            <TextBlock Text="Nombre" Grid.Column="1" FontWeight="Bold" HorizontalAlignment="Center"/>
+                            <TextBlock Text="Categoría" Grid.Column="2" FontWeight="Bold" HorizontalAlignment="Center"/>
+                            <TextBlock Text="Precio" Grid.Column="3" FontWeight="Bold" HorizontalAlignment="Center"/>
+                            <TextBlock Text="Stock" Grid.Column="4" FontWeight="Bold" HorizontalAlignment="Center"/>
+                            <TextBlock Text="Marca" Grid.Column="5" FontWeight="Bold" HorizontalAlignment="Center"/>
+                            <TextBlock Text="Estado" Grid.Column="6" FontWeight="Bold" HorizontalAlignment="Center"/>
+                        </Grid>
+                    </ListView.Header>
+                    
+                    <!--Contenido-->
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <Grid ColumnSpacing="20">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="70"/>
+                                    <ColumnDefinition Width="2.2*"/>
+                                    <ColumnDefinition Width="2*"/>
+                                    <ColumnDefinition Width="1*"/>
+                                    <ColumnDefinition Width="1*"/>
+                                    <ColumnDefinition Width="1.8*"/>
+                                    <ColumnDefinition Width="1.8*"/>
+                                </Grid.ColumnDefinitions>
+
+                                <TextBlock Text="{Binding Icono}" FontSize="20" Grid.Column="0" Width="50" 
+                                           MaxLines="1" TextAlignment="Center" HorizontalAlignment="Center" 
+                                           TextTrimming="CharacterEllipsis" VerticalAlignment="Center"/>
+                                <TextBlock Text="{Binding Nombre}" ToolTipService.ToolTip="{Binding Id}" 
+                                           Grid.Column="1" HorizontalAlignment="Center" TextAlignment="Center"
+                                           VerticalAlignment="Center"/>
+                                <TextBlock Text="{Binding Categoria}" Grid.Column="2" HorizontalAlignment="Center" 
+                                           TextAlignment="Center" VerticalAlignment="Center"/>
+                                <TextBlock Text="{Binding Precio}" Grid.Column="3" HorizontalAlignment="Center" 
+                                           TextAlignment="Center" VerticalAlignment="Center"/>
+                                <TextBlock Text="{Binding Stock}" Grid.Column="4" HorizontalAlignment="Center" 
+                                           TextAlignment="Center" VerticalAlignment="Center"
+                                                   Foreground="{Binding Stock, Converter={StaticResource StockColorConverter}}"
+                                                   FontWeight="{Binding Stock, Converter={StaticResource StockWeightConverter}}"/>
+                                <TextBlock Text="{Binding Marca}" Grid.Column="5" HorizontalAlignment="Center"
+                                           VerticalAlignment="Center" TextAlignment="Center"/>
+                                <ToggleSwitch Grid.Column="6" IsOn="{Binding Activo, Mode=TwoWay}" OnContent="Activo" 
+                                              OffContent="Inactivo" HorizontalAlignment="Center" 
+                                              VerticalAlignment="Center" MinWidth="120"
+                                              Toggled="EstadoToggle_Toggled"/>
+                            </Grid>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+
+            </Grid>
+        </Grid>
+        
+        <!-- ═══════════════════════════════════════════════ -->
+        <!-- FOOTER -->
+        <Grid Grid.Row="2" Background="#5C1010" Height="35"></Grid>
+
+    </Grid>
+</Page>

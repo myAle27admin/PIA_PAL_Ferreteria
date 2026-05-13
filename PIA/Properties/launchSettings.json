@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "PIA (Package)": {
+      "commandName": "MsixPackage"
+    },
+    "PIA (Unpackaged)": {
+      "commandName": "Project"
+    }
+  }
+}

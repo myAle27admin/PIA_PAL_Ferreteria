@@ -1,0 +1,488 @@
+<Page
+    x:Class="PIA.ReportPage"
+
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+
+    xmlns:lvc="using:LiveChartsCore.SkiaSharpView.WinUI"
+
+    mc:Ignorable="d">
+
+    <!-- ========================================================= -->
+    <!-- CONTENEDOR PRINCIPAL                                      -->
+    <!-- Fondo general del módulo de reportes                      -->
+    <!-- ========================================================= -->
+
+    <Grid Background="#FFF5F5">
+
+        <ScrollViewer>
+
+            <!-- ========================================================= -->
+            <!-- STACK PRINCIPAL                                           -->
+            <!-- ========================================================= -->
+
+            <StackPanel Padding="30" Spacing="25">
+
+                <!-- ========================================================= -->
+                <!-- HEADER SUPERIOR                                          -->
+                <!-- Contiene navegación y acceso al historial                -->
+                <!-- ========================================================= -->
+
+                <Grid>
+
+                    <Grid.ColumnDefinitions>
+
+                        <!-- Botón volver -->
+                        <ColumnDefinition Width="Auto"/>
+
+                        <!-- Título -->
+                        <ColumnDefinition Width="*"/>
+
+                        <!-- Botón historial -->
+                        <ColumnDefinition Width="Auto"/>
+
+                    </Grid.ColumnDefinitions>
+
+                    <!-- ========================================================= -->
+                    <!-- BOTÓN VOLVER                                             -->
+                    <!-- Regresa a la pantalla anterior                           -->
+                    <!-- ========================================================= -->
+
+                    <Button
+                        Content="← Volver"
+
+                        Click="VolverButton_Click"
+
+                        Background="#FECACA"
+                        BorderBrush="#FECACA"
+
+                        Foreground="#991B1B"
+
+                        Padding="18,10"
+
+                        FontWeight="SemiBold"/>
+
+                    <!-- ========================================================= -->
+                    <!-- TITULO PRINCIPAL                                         -->
+                    <!-- ========================================================= -->
+
+                    <TextBlock
+                        Grid.Column="1"
+
+                        Text="Reporte de Ventas"
+
+                        FontSize="36"
+                        FontWeight="Bold"
+
+                        Foreground="#B91C1C"
+
+                        HorizontalAlignment="Center"/>
+
+                    <!-- ========================================================= -->
+                    <!-- BOTÓN HISTORIAL                                          -->
+                    <!-- Muestra el historial de ventas                           -->
+                    <!-- ========================================================= -->
+
+                    <Button
+                        x:Name="HistorialButton"
+
+                        Grid.Column="2"
+
+                        Content="Historial de Ventas"
+
+                        Click="HistorialButton_Click"
+
+                        Background="#DC2626"
+                        BorderBrush="#DC2626"
+
+                        Foreground="White"
+
+                        Padding="22,12"
+
+                        FontWeight="SemiBold"/>
+
+                </Grid>
+
+                <!-- ========================================================= -->
+                <!-- DASHBOARD PRINCIPAL                                       -->
+                <!-- Contenedor de métricas y gráfica                           -->
+                <!-- ========================================================= -->
+
+                <StackPanel
+                    x:Name="DashboardPanel"
+
+                    Spacing="25">
+
+                    <!-- ========================================================= -->
+                    <!-- KPIs / TARJETAS DE MÉTRICAS                             -->
+                    <!-- ========================================================= -->
+
+                    <Grid ColumnSpacing="20">
+
+                        <Grid.ColumnDefinitions>
+
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+
+                        </Grid.ColumnDefinitions>
+
+                        <!-- ========================================================= -->
+                        <!-- TARJETA: VENTAS TOTALES                                -->
+                        <!-- ========================================================= -->
+
+                        <Border
+                            Grid.Column="0"
+
+                            Background="#FEE2E2"
+
+                            CornerRadius="24"
+
+                            Padding="22">
+
+                            <StackPanel>
+
+                                <TextBlock
+                                    Text="Ventas Totales"
+
+                                    FontSize="16"
+
+                                    Foreground="#7F1D1D"/>
+
+                                <TextBlock
+                                    x:Name="TotalVentasText"
+
+                                    FontSize="32"
+
+                                    FontWeight="Bold"
+
+                                    Foreground="#B91C1C"/>
+
+                            </StackPanel>
+
+                        </Border>
+
+                        <!-- ========================================================= -->
+                        <!-- TARJETA: NÚMERO DE VENTAS                              -->
+                        <!-- ========================================================= -->
+
+                        <Border
+                            Grid.Column="1"
+
+                            Background="#FECACA"
+
+                            CornerRadius="24"
+
+                            Padding="22">
+
+                            <StackPanel>
+
+                                <TextBlock
+                                    Text="Número de Ventas"
+
+                                    FontSize="16"
+
+                                    Foreground="#7F1D1D"/>
+
+                                <TextBlock
+                                    x:Name="NumeroVentasText"
+
+                                    FontSize="32"
+
+                                    FontWeight="Bold"
+
+                                    Foreground="#B91C1C"/>
+
+                            </StackPanel>
+
+                        </Border>
+
+                        <!-- ========================================================= -->
+                        <!-- TARJETA: PRODUCTO MÁS VENDIDO                          -->
+                        <!-- ========================================================= -->
+
+                        <Border
+                            Grid.Column="2"
+
+                            Background="#FCA5A5"
+
+                            CornerRadius="24"
+
+                            Padding="22">
+
+                            <StackPanel>
+
+                                <TextBlock
+                                    Text="Producto Más Vendido"
+
+                                    FontSize="16"
+
+                                    Foreground="#7F1D1D"/>
+
+                                <TextBlock
+                                    x:Name="ProductoTopText"
+
+                                    FontSize="24"
+
+                                    FontWeight="Bold"
+
+                                    TextWrapping="Wrap"
+
+                                    Foreground="#7F1D1D"/>
+
+                            </StackPanel>
+
+                        </Border>
+
+                        <!-- ========================================================= -->
+                        <!-- TARJETA: MÉTODO DE PAGO MÁS USADO                      -->
+                        <!-- ========================================================= -->
+
+                        <Border
+                            Grid.Column="3"
+
+                            Background="#DC2626"
+
+                            CornerRadius="24"
+
+                            Padding="22">
+
+                            <StackPanel>
+
+                                <TextBlock
+                                    Text="Método Más Usado"
+
+                                    FontSize="16"
+
+                                    Foreground="#FEE2E2"/>
+
+                                <TextBlock
+                                    x:Name="MetodoPagoText"
+
+                                    FontSize="24"
+
+                                    FontWeight="Bold"
+
+                                    Foreground="White"/>
+
+                            </StackPanel>
+
+                        </Border>
+
+                    </Grid>
+
+                    <!-- ========================================================= -->
+                    <!-- GRÁFICA DE VENTAS                                        -->
+                    <!-- ========================================================= -->
+
+                    <Border
+                        Background="White"
+
+                        CornerRadius="28"
+
+                        Padding="30">
+
+                        <StackPanel Spacing="20">
+
+                            <TextBlock
+                                Text="Ventas por Día de la Semana"
+
+                                FontSize="28"
+
+                                FontWeight="Bold"
+
+                                Foreground="#B91C1C"/>
+
+                            <TextBlock
+                                Text="Identifica los días más fuertes para promociones y decisiones de inventario"
+
+                                FontSize="15"
+
+                                Foreground="#7F1D1D"/>
+
+                            <!-- ========================================================= -->
+                            <!-- CHART LIVECHARTS                                      -->
+                            <!-- ========================================================= -->
+
+                            <lvc:CartesianChart
+                                x:Name="VentasChart"
+
+                                Height="420"/>
+
+                        </StackPanel>
+
+                    </Border>
+
+                </StackPanel>
+
+                <!-- ========================================================= -->
+                <!-- PANEL HISTORIAL                                            -->
+                <!-- Visible únicamente al pulsar historial                     -->
+                <!-- ========================================================= -->
+
+                <StackPanel
+                    x:Name="HistorialPanel"
+
+                    Visibility="Collapsed"
+
+                    Spacing="25">
+
+                    <!-- ========================================================= -->
+                    <!-- HEADER HISTORIAL                                         -->
+                    <!-- ========================================================= -->
+
+                    <Grid>
+
+                        <Grid.ColumnDefinitions>
+
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+
+                        </Grid.ColumnDefinitions>
+
+                        <!-- ========================================================= -->
+                        <!-- BOTÓN REGRESAR AL DASHBOARD                            -->
+                        <!-- ========================================================= -->
+
+                        <Button
+                            Content="← Volver al Dashboard"
+
+                            Click="DashboardButton_Click"
+
+                            Background="#FECACA"
+                            BorderBrush="#FECACA"
+
+                            Foreground="#991B1B"
+
+                            Padding="18,10"
+
+                            FontWeight="SemiBold"/>
+
+                        <!-- ========================================================= -->
+                        <!-- TITULO HISTORIAL                                       -->
+                        <!-- ========================================================= -->
+
+                        <TextBlock
+                            Grid.Column="1"
+
+                            Text="Historial de Ventas"
+
+                            FontSize="32"
+
+                            FontWeight="Bold"
+
+                            Foreground="#B91C1C"
+
+                            HorizontalAlignment="Center"/>
+
+                        <!-- ========================================================= -->
+                        <!-- BOTÓN ABRIR TICKETS                                    -->
+                        <!-- Abre carpeta con PDFs generados                        -->
+                        <!-- ========================================================= -->
+
+                        <Button
+                            Grid.Column="1"
+
+                            HorizontalAlignment="Right"
+
+                            Margin="0,70,0,0"
+
+                            Content="Abrir Tickets"
+
+                            Click="TicketsButton_Click"
+
+                            Background="#991B1B"
+                            BorderBrush="#991B1B"
+
+                            Foreground="White"
+
+                            Padding="18,10"
+
+                            FontWeight="SemiBold"/>
+
+                    </Grid>
+
+                    <!-- ========================================================= -->
+                    <!-- LISTADO DE VENTAS                                        -->
+                    <!-- ========================================================= -->
+
+                    <ListView x:Name="VentasListView">
+
+                        <ListView.ItemTemplate>
+
+                            <DataTemplate>
+
+                                <!-- ========================================================= -->
+                                <!-- TARJETA INDIVIDUAL DE VENTA                             -->
+                                <!-- ========================================================= -->
+
+                                <Border
+                                    Background="White"
+
+                                    CornerRadius="18"
+
+                                    Padding="22"
+
+                                    Margin="0,0,0,18">
+
+                                    <StackPanel Spacing="12">
+
+                                        <!-- FECHA -->
+
+                                        <TextBlock
+                                            Text="{Binding Fecha}"
+
+                                            FontSize="18"
+
+                                            FontWeight="SemiBold"
+
+                                            Foreground="#111827"/>
+
+                                        <!-- MÉTODO DE PAGO -->
+
+                                        <TextBlock Foreground="#374151">
+
+                                            <Run Text="Método de Pago: "/>
+
+                                            <Run Text="{Binding MetodoPago}"/>
+
+                                        </TextBlock>
+
+                                        <!-- TOTAL -->
+
+                                        <TextBlock
+                                            FontWeight="Bold"
+
+                                            FontSize="18"
+
+                                            Foreground="#B91C1C">
+
+                                            <Run Text="Total: $"/>
+
+                                            <Run Text="{Binding Total}"/>
+
+                                        </TextBlock>
+
+                                    </StackPanel>
+
+                                </Border>
+
+                            </DataTemplate>
+
+                        </ListView.ItemTemplate>
+
+                    </ListView>
+
+                </StackPanel>
+
+            </StackPanel>
+
+        </ScrollViewer>
+
+    </Grid>
+
+</Page>
